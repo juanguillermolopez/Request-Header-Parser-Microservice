@@ -1,34 +1,203 @@
 <!DOCTYPE html>
-
-<html>
-
-   <head>
-      <title>Request Header Parser</title>
-      <link rel="shortcut icon" href="https://cdn.hyperdev.com/us-east-1%3A52a203ff-088b-420f-81be-45bf559d01b1%2Ffavicon.ico" type="image/x-icon"/>
-      <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
-      <link href="style.css" rel="stylesheet" type="text/css">
-   </head>
-
-   <body>
-      <div class="container">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Header Parser Microservice</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 20px 0 10px 0;
+            font-size: 1.8em;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        
+        code {
+            background: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9em;
+        }
+        
+        .example {
+            background: #e8f4f8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #3498db;
+        }
+        
+        .endpoint {
+            background: #2c3e50;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: monospace;
+            overflow-x: auto;
+        }
+        
+        .response {
+            background: #27ae60;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: monospace;
+        }
+        
+        .try-button {
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin: 10px 0;
+            display: inline-block;
+            text-decoration: none;
+        }
+        
+        .try-button:hover {
+            background: #2980b9;
+        }
+        
+        .result {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #27ae60;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        .json-key { color: #881391; }
+        .json-string { color: #c41a16; }
+        .json-number { color: #1c00cf; }
+    </style>
+</head>
+<body>
+    <div class="container">
         <h1>Request Header Parser Microservice</h1>
+        
+        <h2>How to Use</h2>
+        <p>This API returns information about your request headers, including your IP address, language, and software.</p>
+        
+        <div class="example">
+            <h3>Example Usage:</h3>
+            <div class="endpoint">
+                GET /api/whoami
+            </div>
+            <div class="response">
+                {
+                  <span class="json-key">"ipaddress"</span>: <span class="json-string">"159.20.14.100"</span>,
+                  <span class="json-key">"language"</span>: <span class="json-string">"en-US,en;q=0.5"</span>,
+                  <span class="json-key">"software"</span>: <span class="json-string">"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:50.0) Gecko/20100101 Firefox/50.0"</span>
+                }
+            </div>
+        </div>
+        
+        <h2>API Endpoints</h2>
+        <p><strong>GET</strong> <code>/api/whoami</code></p>
+        <p>Returns information about your request:</p>
+        <ul>
+            <li><strong>ipaddress</strong>: Your IP address</li>
+            <li><strong>language</strong>: Your preferred language(s)</li>
+            <li><strong>software</strong>: Your browser/operating system</li>
+        </ul>
+        
+        <p><strong>GET</strong> <code>/api/requests</code></p>
+        <p>Returns the last 50 requests (for testing)</p>
+        
+        <p><strong>GET</strong> <code>/api/stats</code></p>
+        <p>Returns statistics about requests</p>
+        
+        <h2>Try It Out</h2>
+        <a href="/api/whoami" class="try-button" target="_blank">Test /api/whoami</a>
+        
+        <div class="result">
+            <h3>Your Request Information:</h3>
+            <p>Click the button above to see your request headers information.</p>
+            <div id="result-container"></div>
+        </div>
+        
+        <div class="footer">
+            <p>Built with ❤️ for freeCodeCamp</p>
+            <p>Microservice | Node.js | Express | MongoDB | Mongoose</p>
+        </div>
+    </div>
 
-        <h2>Example Usage:</h2>
-        <p>
-          <a href="api/whoami">[base url]/api/whoami</a>
-        </p>
-
-        <h2>Example Output:</h2>
-        <p>
-          <code>{"ipaddress":"::ffff:159.20.14.100","language":"en-US,en;q=0.5",<br>"software":"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:50.0) Gecko/20100101 Firefox/50.0"}</code>
-        </p>
-      </div>
-      <div class="footer">
-        <p>
-          by <a href="https://www.freecodecamp.org">freeCodeCamp</a>
-        </p>
-      </div>
-   </body>
-
-
+    <script>
+        // Simple JavaScript to display results
+        document.addEventListener('DOMContentLoaded', function() {
+            const resultContainer = document.getElementById('result-container');
+            
+            // Try to fetch user's info on page load
+            fetch('/api/whoami')
+                .then(response => response.json())
+                .then(data => {
+                    resultContainer.innerHTML = `
+                        <p><strong>IP Address:</strong> ${data.ipaddress}</p>
+                        <p><strong>Language:</strong> ${data.language}</p>
+                        <p><strong>Software:</strong> ${data.software}</p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                })
+                .catch(error => {
+                    resultContainer.innerHTML = `<p>Error fetching data: ${error.message}</p>`;
+                });
+        });
+    </script>
+</body>
 </html>
